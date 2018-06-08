@@ -1,0 +1,12 @@
+-- Configuration for unit tests
+-- See: http://olivinelabs.com/busted/ 
+return {
+	_all = {
+		coverage = true
+	},
+	default = {
+		lpath = "./?.lua;./?/init.lua",
+		helper = "spec/helper.lua",
+		["auto-insulate"] = false,
+	}
+}
