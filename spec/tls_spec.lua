@@ -1,6 +1,8 @@
 describe('tls', function()
 
+	local ffi = require('ffi')
 	local nb = require('dns.nbio')
+	local dns = require('dns')
 	local tls = require('dns.tls')
 
 	it('does ping/pong over TLS', function ()
@@ -12,7 +14,7 @@ describe('tls', function()
 			local client = assert(server:accept())
 			-- Upgrade to TLS
 			client = assert(tls.server(client))
-			local ret, _ = client:receive(4)
+			local ret, err = client:receive(4)
 			assert.same('PING', ret)
 			reads = reads + 1
 			assert(client:send('PONG'))

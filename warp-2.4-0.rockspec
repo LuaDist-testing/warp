@@ -1,15 +1,16 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "warp"
-version = "0.1-2"
+version = "2.4-0"
 -- LuaDist source
 source = {
-  tag = "0.1-2",
+  tag = "2.4-0",
   url = "git://github.com/LuaDist-testing/warp.git"
 }
 -- Original source
 -- source = {
---    url = "git://github.com/vavrusa/ljdns"
+--    url = "git://github.com/vavrusa/ljdns",
+--    tag = "v2.4-0"
 -- }
 description = {
    summary = "A DNS router/middleware server that can run in OpenResty.",

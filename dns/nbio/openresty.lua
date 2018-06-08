@@ -1,7 +1,7 @@
 -- Minimal compatibility layer for OpenResty
 return function (M)
 
-function M.socket(_, proto)
+function M.socket(family, proto)
 	return proto == 'stream' and ngx.socket.tcp() or ngx.socket.udp()
 end
 

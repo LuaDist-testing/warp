@@ -1,6 +1,9 @@
 local dns = require('dns')
 local nb = require('dns.nbio')
 
+-- Enable trace stitching
+require('jit.opt').start('minstitch=5')
+
 -- Parse config options
 local tx, rx = 0, 0
 local udp = false
@@ -34,9 +37,9 @@ local function client(sock, xchg, resp, i)
 	rx = rx + 1
 end
 
-local function ping(sock, xchg, tries)
+local function ping(sock, xchg, count)
 	local resp = dns.packet(64)
-	for i = 0, tries - 1 do
+	for i = 0, count - 1 do
 		assert(nb.go(client, sock, xchg, resp, i))
 	end
 end
@@ -66,22 +69,22 @@ elseif receiver and not udp then
 	server:bind(host, port)
 	assert(nb.go(function()
 		while true do
-			local c = assert(server:accept())
-			nb.go(pong, c, nb.tcpsend, nb.tcprecv)
+			local client = assert(server:accept())
+			nb.go(pong, client, nb.tcpsend, nb.tcprecv)
 		end
 	end))
 elseif udp then
-	local c = nb.socket(nb.family(host), 'dgram')
+	local client = nb.socket(nb.family(host), 'dgram')
 	assert(nb.go(function ()
-		assert(c:connect(host, port))
+		assert(client:connect(host, port))
 		for _ = 1, reps do
 			ping(client, nb.udpxchg, count)
 		end
 	end))
 else
-	local c = nb.socket(nb.family(host), 'stream')
+	local client = nb.socket(nb.family(host), 'stream')
 	assert(nb.go(function ()
-		assert(c:connect(host, port))
+		assert(client:connect(host, port))
 		for _ = 1, reps do
 			ping(client, nb.tcpxchg, count)
 		end
